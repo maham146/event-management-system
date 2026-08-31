@@ -2,21 +2,21 @@ package db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.Properties;
+import java.io.FileInputStream;
 
 public class DBConnect {
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // SECURITY WARNING: Move these values to a config file or environment
-    // variables before sharing or deploying this project.
-    // Example: load from a .properties file so the password is never in source.
-    // ─────────────────────────────────────────────────────────────────────────
-    private static final String DB_URL  = "jdbc:oracle:thin:@localhost:1521/orcl";
-    private static final String DB_USER = "C##student";
-    private static final String DB_PASS = "stud123"; // TODO: move to config file
 
     public static Connection getConnection() {
         Connection con = null;
         try {
+            Properties props = new Properties();
+            props.load(new FileInputStream("db.properties"));
+
+            String DB_URL  = props.getProperty("db.url");
+            String DB_USER = props.getProperty("db.user");
+            String DB_PASS = props.getProperty("db.password");
+
             Class.forName("oracle.jdbc.driver.OracleDriver");
             con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         } catch (Exception e) {
